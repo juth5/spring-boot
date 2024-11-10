@@ -25,6 +25,13 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	compileOnly 'org.projectlombok:lombok:1.18.28' // 必要に応じて最新バージョン
+	annotationProcessor 'org.projectlombok:lombok:1.18.28'
+	implementation 'org.mybatis:mybatis:3.5.13' // 最新バージョンを確認してください
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2' // Spring Boot用のMyBatis Starter
+	implementation 'org.postgresql:postgresql:42.5.0' // 最新バージョンを確認してください
+
+
 }
 
 
