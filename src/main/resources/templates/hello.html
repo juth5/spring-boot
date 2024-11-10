@@ -3,9 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
   <title>Document</title>
 </head>
 <body>
-  <div>hogehoge!!!!!!!</div>
+  <button id="button">button</button>
+  <button id="button1">button2</button>
 </body>
+<script>
+  document.getElementById('button').addEventListener('click', () => {
+    // APIエンドポイントにリクエストを送信
+    fetch('/api/announces')
+      .then(response => {
+        // レスポンスが正常に返されたか確認
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // JSON形式に変換
+      })
+      .then(data => {
+        console.log(data); // 取得したデータをコンソールに表示
+        // ここでデータを使用する処理を記述
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+
+  });
+
+  document.getElementById('button1').addEventListener('click', () => {
+    const userId = 123; // 送信したいuserId
+    const announceId = 456; // 送信したいannounceId
+
+    // APIエンドポイントにPOSTリクエストを送信
+    fetch('/api/announce/read', {
+        method: 'POST', // POSTリクエストを指定
+        headers: {
+            'Content-Type': 'application/json' // JSON形式で送信するためのヘッダー
+        },
+        body: JSON.stringify({ userId: userId, announceId: announceId }) // 送信するデータをJSON形式に変換
+    })
+    .then(response => {
+        // レスポンスが正常に返されたか確認
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // JSON形式に変換
+      })
+      .then(data => {
+        
+        console.log(data); // 取得したデータをコンソールに表示
+        // ここでデータを使用する処理を記述
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+});
+
+</script>
 </html>

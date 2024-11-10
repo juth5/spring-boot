@@ -2,8 +2,7 @@ package com.example.demo.entity;
 import lombok.Data;
 
 @Data
-public class Memo {
+public class Announce {
   private Long id;
   private String content;
-  private Long user_id;
 }
