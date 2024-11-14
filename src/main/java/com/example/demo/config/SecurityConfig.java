@@ -15,7 +15,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/public/**").permitAll()  // 認証不要のパス
+                .antMatchers("/login", "/hello").permitAll()  // 認証不要のパス
                 .anyRequest().authenticated()           // その他のリクエストは認証が必要
             .and()
             .formLogin()
@@ -61,14 +61,22 @@ public class SecurityConfig {
 // この一連のプロセスにより、Spring SecurityがUserDetailsServiceを通じてデータベースと照合し、認証を自動的に行います。
 
 
+//Spring Securityでは、.loginProcessingUrl()を指定しないと、自動的に/loginが認証処理のエンドポイントとして設定されます。そのため、フォームのaction属性を/loginにすることで認証が実行されます。
 
 
+//UsernamePasswordAuthenticationFilterは、Spring Securityが自動で設定してくれるフィルタで、通常は開発者が明示的に定義する必要はありません。このフィルタは、デフォルトで**/loginへのPOSTリクエストをキャッチして認証処理を開始**します。
+//フォームのname属性がusernameとpasswordでないとSpring Securityが期待する形式と一致しないため、正しく認証が行われません。
 
+// .formLogin()
+// .loginPage("/login")
+// .usernameParameter("manname")        // カスタムパラメータ名を指定
+// .passwordParameter("pass")           // カスタムパラメータ名を指定
+// .permitAll();
+// こうすると変えられる
 
-
-
-
-
+// UsernamePasswordAuthenticationFilterでformのpostを受け取って、AuthenticationManagerに処理を委ねるこのAuthenticationManagerが
+// UserDetailsServiceを使って認証を開始する
+// AuthenticationManagerがUserDetailsServiceのloadUserByUsernameメソッドを呼び出し、usernameに対応するユーザー情報を取得します。
 
 
 // ChatGPT の回答は必ずしも正しいとは限りません。重要な情報は確認するようにしてください。

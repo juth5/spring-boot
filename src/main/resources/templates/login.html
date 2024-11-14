@@ -7,5 +7,16 @@
 </head>
 <body>
   <div>aaaaaaaaaa</div>
+  <form th:action="@{/login}" method="post">
+    <div>
+        <label>ユーザー名: <input type="text" name="name"/></label>
+    </div>
+    <div>
+        <label>パスワード: <input type="password" name="password"/></label>
+    </div>
+    <div>
+        <button type="submit">ログイン</button>
+    </div>
+</form>
 </body>
 </html>
