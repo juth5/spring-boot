@@ -29,7 +29,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String sayHello(HttpServletRequest request) {
-
+        //sessionの中にユーザー情報が入っている
+        //Controllerには自動で入ってくる
         HttpSession session = request.getSession(false);
         List<Memo> memos = memoMapper.findAll();
         List<Users> users = usersMapper.findAll();
