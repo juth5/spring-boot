@@ -13,11 +13,14 @@ public class SecurityConfig {
     //つまり、このメソッドは内部で呼ばれるメソッドを定義している
     //このメソッドの主な目的は、アプリケーションのリクエストに対する認証・認可ポリシーを設定することです。
     //Spring Bootでセキュリティ設定をさらにカスタマイズしたい場合は、SecurityFilterChain を定義して、Spring Securityの設定を追加・変更できます。
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf().disable() // CSRF保護を無効化
             .authorizeRequests()
-                .antMatchers("/login").permitAll()  // 認証不要のパス
+                .antMatchers("/login", "/logout").permitAll()  // 認証不要のパス
                 .anyRequest().authenticated()           // その他のリクエストは認証が必要
             .and()
             .formLogin()
@@ -26,10 +29,16 @@ public class SecurityConfig {
                 .permitAll()
             .and()
             .logout()
+            //.logoutUrl("/logout")                         // ログアウトURLを指定
+                .logoutSuccessUrl("/login?logout")            // ログアウト後のリダイレクト先
+                .invalidateHttpSession(true)                  // セッションの無効化
+                .clearAuthentication(true)                    // 認証情報のクリア
+                .deleteCookies("JSESSIONID")                  // クッキーの削除
                 .permitAll();
 
         return http.build();
     }
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // BCryptを使用してパスワードをエンコード

@@ -33,7 +33,7 @@ public class HelloController {
         HttpSession session = request.getSession(false);
         List<Memo> memos = memoMapper.findAll();
         List<Users> users = usersMapper.findAll();
-        System.out.println(users);
+
         userInfoService.getAuthenticatedUserDetails();
 
         return "hello";
