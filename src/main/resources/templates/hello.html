@@ -10,7 +10,16 @@
   <form action="/logout" method="post">
     <input type="hidden" name="_csrf" value="${_csrf.token}"> <!-- CSRFトークン -->
     <button type="submit">Logout</button>
-</form>
+  </form>
+  <form action="/sample" method="get">
+    <button type="submit">sample</button>
+  </form>
+
+  <button onclick="fetch('/sample').then(res => res.json()).then(data => console.log(data))">
+    sample
+  </button>
+  
+  
 
 </body>
 </html>
