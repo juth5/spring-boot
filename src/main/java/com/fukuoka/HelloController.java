@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.fukuoka;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.demo.entity.Memo;
-import com.example.demo.entity.Users;
-import com.example.demo.mapper.MemoMapper;
-import com.example.demo.mapper.UsersMapper;
-import com.example.demo.service.UserInfoService;
+import com.fukuoka.entity.Memo;
+import com.fukuoka.entity.Users;
+import com.fukuoka.mapper.MemoMapper;
+import com.fukuoka.mapper.UsersMapper;
+import com.fukuoka.service.UserInfoService;
 
 @Controller
 public class HelloController {

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.fukuoka.service;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

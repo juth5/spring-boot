@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.fukuoka.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +10,8 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.Users;
-import com.example.demo.mapper.UsersMapper;
+import com.fukuoka.entity.Users;
+import com.fukuoka.mapper.UsersMapper;
 
 
 @Service

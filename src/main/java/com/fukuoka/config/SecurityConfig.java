@@ -1,10 +1,11 @@
-package com.example.demo.config;
+package com.fukuoka.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -18,26 +19,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // CSRF保護を無効化
-            .authorizeRequests()
-                .antMatchers("/login", "/logout").permitAll()  // 認証不要のパス
-                .anyRequest().authenticated()           // その他のリクエストは認証が必要
-            .and()
-            .formLogin()
-                .loginPage("/login")                    // カスタムログインページの指定
-                .defaultSuccessUrl("/hello", true)   // 認証後のリダイレクト先を指定
-                .permitAll()
-            .and()
-            .logout()
-            //.logoutUrl("/logout")                         // ログアウトURLを指定
-                .logoutSuccessUrl("/login?logout")            // ログアウト後のリダイレクト先
-                .invalidateHttpSession(true)                  // セッションの無効化
-                .clearAuthentication(true)                    // 認証情報のクリア
-                .deleteCookies("JSESSIONID")                  // クッキーの削除
-                .permitAll();
+            .csrf().disable()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    new AntPathRequestMatcher("/me"),
+                    new AntPathRequestMatcher("/shops/**/favorite")
+                ).authenticated()
+                .anyRequest().permitAll()
+            )
+            .formLogin().disable()
+            .httpBasic(); // Postmanやcurlで使いやすい
 
         return http.build();
     }
+
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    //     http
+    //         .csrf().disable() // CSRF保護を無効化
+    //         .authorizeRequests()
+    //             .antMatchers("/login", "/logout").permitAll()  // 認証不要のパス
+    //             .anyRequest().authenticated()           // その他のリクエストは認証が必要
+    //         .and()
+    //         .formLogin()
+    //             .loginPage("/login")                    // カスタムログインページの指定
+    //             .defaultSuccessUrl("/hello", true)   // 認証後のリダイレクト先を指定
+    //             .permitAll()
+    //         .and()
+    //         .logout()
+    //         //.logoutUrl("/logout")                         // ログアウトURLを指定
+    //             .logoutSuccessUrl("/login?logout")            // ログアウト後のリダイレクト先
+    //             .invalidateHttpSession(true)                  // セッションの無効化
+    //             .clearAuthentication(true)                    // 認証情報のクリア
+    //             .deleteCookies("JSESSIONID")                  // クッキーの削除
+    //             .permitAll();
+
+    //     return http.build();
+    // }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
