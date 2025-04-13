@@ -3,17 +3,13 @@ package com.example.demo.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.CustomUserDetails;
 import com.example.demo.entity.Users;
 import com.example.demo.mapper.UsersMapper;
 
@@ -33,21 +29,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                 // データベースからユーザー情報を取得
                 String dbUsername = user.getName();
                 String dbPassword = user.getPassword();
-                String email = "hoge@co.jp";
-                String fullName = "fukagawa";
-                Collection<? extends GrantedAuthority> authorities = 
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
 
                 // UserDetailsオブジェクトを生成して返す
-                // return User.builder()
-                //         .username(dbUsername)
-                //         .password(dbPassword)
-                //         .authorities(Collections.emptyList())  // 空のリストを渡す
+                return User.builder()
+                        .username(dbUsername)
+                        .password(dbPassword)
+                        .authorities(Collections.emptyList())  // 空のリストを渡す
 
-                //         //.roles(role) // Spring Securityで使用するために役割を設定
-                //         .build();
-                return new CustomUserDetails(username, dbPassword, authorities, email, fullName);
+                        //.roles(role) // Spring Securityで使用するために役割を設定
+                        .build();
             } else {
                 // ユーザーが見つからない場合は例外をスロー
                 throw new UsernameNotFoundException("User not found: " + username);
