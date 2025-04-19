@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+# Firebase secret key
+src/main/resources/firebase/fukuoa-media-firebase-adminsdk-fbsvc-0ab0f8e398.json
 
 ### STS ###
 .apt_generated
