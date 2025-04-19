@@ -1,6 +1,9 @@
 package com.fukuoka.mapper;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import com.fukuoka.entity.Category;
 
@@ -14,4 +17,9 @@ public interface CategoryMapper {
 
     @Select("SELECT * FROM category")
     List<Category> findAll();
+
+    @Insert("INSERT INTO category(name, image_url) VALUES(#{name}, #{imageUrl})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    void insert(Category category);
+
 }

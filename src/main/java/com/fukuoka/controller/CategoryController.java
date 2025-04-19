@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fukuoka.entity.Category;
@@ -22,4 +24,10 @@ public class CategoryController {
     public List<Category> getAllCategories() {
         return categoryMapper.findAll();
     }
+
+    @PostMapping("/categories/post")
+    public void postCategory(@RequestBody Category category) {
+        categoryMapper.insert(category);
+    }
+
 }
