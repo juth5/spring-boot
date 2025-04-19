@@ -53,7 +53,11 @@ public class FirebaseStorageService {
                 .setContentType(file.getContentType())
                 .build();
 
-        storage.create(blobInfo, file.getBytes());
+        storage.create(
+            blobInfo, 
+            file.getBytes(),
+            Storage.BlobTargetOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ)
+        );
 
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, fileName);
     }
