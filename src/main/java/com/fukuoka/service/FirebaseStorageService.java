@@ -8,25 +8,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
 public class FirebaseStorageService {
-    //使用するfirebaseのstorageを指定
+
     private final String bucketName = "fukuoa-media.firebasestorage.app";
-    //firebaseのstrageのAPI
     private final Storage storage;
 
     public FirebaseStorageService() throws IOException {
-        //firebase全体の初期設定
-        FileInputStream serviceAccount = new FileInputStream("/Users/juth5/work/spring-boot-app/src/main/resources/firebase/fukuoa-media-firebase-adminsdk-fbsvc-0ab0f8e398.json");
+    String base64 = System.getenv("FIREBASE_CREDENTIALS");  
+    InputStream credentialStream;
 
-        //storageAPIにオプションで認証などの設定をして使えるようにする
-        this.storage = StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(serviceAccount))
-                .build()
-                .getService();
+    if (base64 != null && !base64.isBlank()) {
+        byte[] decoded = Base64.getDecoder().decode(base64);
+        Path tempFile = Files.createTempFile("firebase", ".json");
+        Files.write(tempFile, decoded);
+        tempFile.toFile().deleteOnExit();
+        credentialStream = new FileInputStream(tempFile.toFile());
+    } else {
+        // ローカル開発用 fallback
+        credentialStream = getClass().getClassLoader().getResourceAsStream("firebase/fukuoa-media-firebase-adminsdk-fbsvc-0ab0f8e398.json");
+        if (credentialStream == null) {
+            throw new FileNotFoundException("ローカル用の Firebase キーファイルが見つかりません");
+        }
+    }
+
+    this.storage = StorageOptions.newBuilder()
+            .setCredentials(ServiceAccountCredentials.fromStream(credentialStream))
+            .build()
+            .getService();
     }
 
     public String uploadImage(MultipartFile file) throws IOException {
