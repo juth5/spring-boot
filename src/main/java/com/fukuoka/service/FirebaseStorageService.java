@@ -9,24 +9,34 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
 public class FirebaseStorageService {
-    //使用するfirebaseのstorageを指定
+
     private final String bucketName = "fukuoa-media.firebasestorage.app";
-    //firebaseのstrageのAPI
     private final Storage storage;
 
     public FirebaseStorageService() throws IOException {
-        //firebase全体の初期設定
-        FileInputStream serviceAccount = new FileInputStream("/Users/juth5/work/spring-boot-app/src/main/resources/firebase/fukuoa-media-firebase-adminsdk-fbsvc-0ab0f8e398.json");
+        String base64 = System.getenv("FIREBASE_CREDENTIALS");
+        if (base64 == null || base64.isBlank()) {
+            throw new IllegalStateException("環境変数 'FIREBASE_CREDENTIALS' が未設定または空です");
+        }
 
-        //storageAPIにオプションで認証などの設定をして使えるようにする
-        this.storage = StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(serviceAccount))
-                .build()
-                .getService();
+        byte[] decoded = Base64.getDecoder().decode(base64);
+        Path tempFile = Files.createTempFile("firebase", ".json");
+        Files.write(tempFile, decoded);
+        tempFile.toFile().deleteOnExit();
+
+        try (FileInputStream serviceAccount = new FileInputStream(tempFile.toFile())) {
+            this.storage = StorageOptions.newBuilder()
+                    .setCredentials(ServiceAccountCredentials.fromStream(serviceAccount))
+                    .build()
+                    .getService();
+        }
     }
 
     public String uploadImage(MultipartFile file) throws IOException {
