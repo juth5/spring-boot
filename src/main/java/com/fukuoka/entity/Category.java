@@ -9,4 +9,6 @@ public class Category {
 	private String name;
 	
 	private String imageUrl;
+
+	private boolean delFlg = false;
 }
