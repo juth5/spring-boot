@@ -1,10 +1,14 @@
 package com.fukuoka.mapper;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
 import com.fukuoka.entity.Category;
 
 
@@ -15,11 +19,19 @@ import com.fukuoka.entity.Category;
 @Mapper
 public interface CategoryMapper {
 
-    @Select("SELECT * FROM category")
+    @Select("SELECT * FROM category WHERE id = #{id} AND del_flg = false")
+    Category findById(@Param("id") Long id);
+
+    @Select("SELECT * FROM category WHERE del_flg = false")
     List<Category> findAll();
 
     @Insert("INSERT INTO category(name, image_url) VALUES(#{name}, #{imageUrl})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void insert(Category category);
+    int insert(Category category);
 
+    @Update("UPDATE category SET name = #{name}, image_url = #{imageUrl} WHERE id = #{id}")
+    void update(Category category);
+
+    @Delete("UPDATE category SET del_flg = true WHERE id = #{id} AND del_flg = false")
+    int logicalDeleteById(Long id);
 }
