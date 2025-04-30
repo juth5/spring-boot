@@ -1,11 +1,18 @@
 package com.fukuoka.config;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -19,16 +26,40 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(Customizer.withDefaults())  // ← これでCORSを有効化！
             .csrf().disable()
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    new AntPathRequestMatcher("/me"),
+                    new AntPathRequestMatcher("/categories"),
                     new AntPathRequestMatcher("/shops/**/favorite")
                 ).authenticated()
                 .anyRequest().permitAll()
             )
-            .formLogin().disable()
-            .httpBasic(); // Postmanやcurlで使いやすい
+            .formLogin(form -> form
+                .loginProcessingUrl("/api/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .successHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+
+                })
+                .failureHandler((request, response, exception) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    System.out.println("ログイン失敗: " + exception.getMessage());
+                })
+                
+            )
+        .logout(logout -> logout
+            .logoutUrl("/logout")  // ← フロントからこのURLにPOSTすればログアウト
+            .logoutSuccessHandler((request, response, authentication) -> {
+                response.setStatus(HttpServletResponse.SC_OK);
+                System.out.println("ログアウト成功");
+            })
+            .invalidateHttpSession(true)
+            .clearAuthentication(true)
+            .deleteCookies("JSESSIONID")
+        );
+            
 
         return http.build();
     }
@@ -59,6 +90,19 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // BCryptを使用してパスワードをエンコード
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
 

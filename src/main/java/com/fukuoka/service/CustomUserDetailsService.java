@@ -10,25 +10,23 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fukuoka.entity.Users;
-import com.fukuoka.mapper.UsersMapper;
-
+import com.fukuoka.entity.Account;
+import com.fukuoka.mapper.AccountMapper;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
     @Autowired
-    private UsersMapper usersMapper;
+    private AccountMapper accountMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            Users user = usersMapper.findByUsername(username);
-
-            if (user != null) {
+            Account account = accountMapper.findByUsername(username);
+            
+            if (account != null) {
                 // データベースからユーザー情報を取得
-                String dbUsername = user.getName();
-                String dbPassword = user.getPassword();
+                String dbUsername = account.getUsername();
+                String dbPassword = account.getPassword();
 
                 // UserDetailsオブジェクトを生成して返す
                 return User.builder()
