@@ -1,11 +1,25 @@
 package com.fukuoka.config;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.fukuoka.util.JwtUtil;
 
 @EnableWebSecurity
 public class SecurityConfig {
@@ -18,17 +32,75 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // http
+        //     .cors(Customizer.withDefaults())  // ← これでCORSを有効化！
+        //     .csrf().disable()
+        //     .authorizeHttpRequests(auth -> auth
+        //         .requestMatchers(
+        //             new AntPathRequestMatcher("/categories"),
+        //             new AntPathRequestMatcher("/shops/**/favorite")
+        //         ).authenticated()
+        //         .anyRequest().permitAll()
+        //     )
+        //     .formLogin(form -> form
+        //         .loginProcessingUrl("/api/login")
+        //         .usernameParameter("username")
+        //         .passwordParameter("password")
+        //         .successHandler((request, response, authentication) -> {
+        //             response.setStatus(HttpServletResponse.SC_OK);
+        //             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        //             String username = userDetails.getUsername();
+        //             String jwt = JwtUtil.generateToken(username); // 自作のJWT生成メソッド呼び出し
+
+        //             response.setContentType("application/json");
+        //             response.setCharacterEncoding("UTF-8");
+
+        //             // JSONでトークンを返す
+        //             String json = String.format("{\"token\": \"%s\"}", jwt);
+        //             response.getWriter().write(json);
+        //             // response.setHeader("Authorization", "Bearer " + jwt); // ← JWTをレスポンスヘッダに返す
+        //         })
+        //         .failureHandler((request, response, exception) -> {
+        //             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        //             System.out.println("ログイン失敗: " + exception.getMessage());
+        //         })
+                
+        //     )
+        // .logout(logout -> logout
+        //     .logoutUrl("/logout")
+        //     .logoutSuccessHandler((request, response, authentication) -> {
+        //         response.setStatus(HttpServletResponse.SC_OK);
+        //         System.out.println("ログアウト成功");
+        //     })
+        //     .invalidateHttpSession(true)
+        //     .clearAuthentication(true)
+        //     .deleteCookies("JSESSIONID")
+        // );
+        // http.addFilterBefore(
+        //     new JwtAuthenticationFilter(new JwtUtil()),
+        //     UsernamePasswordAuthenticationFilter.class
+        // );
+
+        // return http.build();
         http
-            .csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    new AntPathRequestMatcher("/me"),
-                    new AntPathRequestMatcher("/shops/**/favorite")
-                ).authenticated()
-                .anyRequest().permitAll()
-            )
-            .formLogin().disable()
-            .httpBasic(); // Postmanやcurlで使いやすい
+        .cors(Customizer.withDefaults())
+        .csrf().disable()
+        .sessionManagement(sess -> sess
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ★ セッション使わない
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(
+                new AntPathRequestMatcher("/categories"),
+                new AntPathRequestMatcher("/shops/**/favorite")
+            ).authenticated()
+            .anyRequest().permitAll()
+        );
+
+        // JWTフィルターを組み込み（ログイン以外のすべてのAPIでトークン検証）
+        http.addFilterBefore(
+            new JwtAuthenticationFilter(new JwtUtil()),
+            UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
@@ -59,6 +131,24 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // BCryptを使用してパスワードをエンコード
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
 
