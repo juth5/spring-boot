@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>PDF Report</title>
+  <style>
+  body {
+    font-family: 'Noto Sans JP';
+  }
+  .page-break {
+    page-break-before: always;
+  }
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+</style>
+</head>
+<body>
+  <h1>hogehogehoge</h1>
+  <h1>ほげほげほげ</h1>
+
+  <table border="1">
+    <tr>
+      <th>aaaaaaaaa</th>
+      <th>aaaaaaa</th>
+    </tr>
+    <tr th:each="row : ${rows}">
+      <td th:text="${row.name}">aaaaaaaaa</td>
+      <td th:text="${row.value}">aaaaaaaaaa</td>
+    </tr>
+  </table>
+  <div class="page-break"></div> <!-- ★ 改ページ -->
+
+  <h1>hogehogehoge2222222222</h1>
+  <h1>ほげほげほげ2222222222222</h1>
+
+  <table border="1">
+    <tr>
+      <th>aaaaaaaaa</th>
+      <th>aaaaaaa</th>
+    </tr>
+    <tr th:each="row : ${rows}">
+      <td th:text="${row.name}">aaaaaaaaa</td>
+      <td th:text="${row.value}">aaaaaaaaaa</td>
+    </tr>
+  </table>
+</body>
+</html>
