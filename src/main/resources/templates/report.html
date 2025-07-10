@@ -10,16 +10,108 @@
   .page-break {
     page-break-before: always;
   }
+  .border {
+  border-collapse: collapse;
+}
+
+.table-bordered td,
+.table-bordered th {
+  border: 1px solid #333;
+  padding: 8px;
+}
+
+.table-header {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.table-striped tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table-sm td, .table-sm th {
+  padding: 4px 8px;
+}
+p, div {
+  line-height: 1.4 !important;
+}
+
+
 @page {
   size: A4;
-  margin: 20mm;
+  margin: 10mm;
+  @bottom-center {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 10px;
+  }
+}
+.f {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.fbw {
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  justify-content: space-between;
+}
+.border {
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--border-color);
+}
+.p6 {
+  padding: 6px !important;
+}
+.mb4 {
+  margin-bottom: 4px;
 }
 
 </style>
 </head>
 <body>
-  <h1>hogehogehoge</h1>
-  <h1>ほげほげほげ</h1>
+  <div style="width: 100%;" class="mb4">
+    <div style="float: left;">
+      <div>南花畑発電所</div>
+      <div>巡視日常点検 2025年7月</div>
+    </div>
+    <table class="border table-bordered table-striped table-sm" style="float: right;">
+      <thead class="table-header">
+        <tr>
+          <th class="col-name">名前</th>
+          <th class="col-date">日付</th>
+          <th class="col-action">操作</th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <tr class="table-row">
+          <td class="col-name">深川</td>
+          <td class="col-date">2025年7月10日</td>
+          <td class="col-action">承認</td>
+        </tr>
+        <tr class="table-row">
+          <td class="col-name">田中</td>
+          <td class="col-date">2025年7月7日</td>
+          <td class="col-action">報告</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="clear: both;"></div>
+
+  </div>
+
+  <div>
+    <div class="mb4">コメント</div>
+    <div class="border p6">10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけて10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけています。午後5時時点では、線状降水帯の発生は確認されていませんが、今後の状況には十分な注意が必要です。千葉市でも、急な雷雨により多くの人がずぶぬれとなり、駅前では屋根のある場所へ急ぐ姿が見られました。10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけています。あああああああまた、記録的短時間大雨情報が発表された埼玉県上尾市では、駅前で急いで帰宅の途につく人々の姿が見受けられました。</div>
+  </div>
+
+
+<a href="#" onclick="window.print()">印刷またはPDF保存</a>
+<div class="page-break"></div> <!-- ★ 改ページ -->
+
+    <a href="/report/pdf" target="_blank">PDFをダウンロード</a>
+
+
 
   <table border="1">
     <tr>
@@ -31,20 +123,9 @@
       <td th:text="${row.value}">aaaaaaaaaa</td>
     </tr>
   </table>
-  <div class="page-break"></div> <!-- ★ 改ページ -->
 
-  <h1>hogehogehoge2222222222</h1>
-  <h1>ほげほげほげ2222222222222</h1>
 
-  <table border="1">
-    <tr>
-      <th>aaaaaaaaa</th>
-      <th>aaaaaaa</th>
-    </tr>
-    <tr th:each="row : ${rows}">
-      <td th:text="${row.name}">aaaaaaaaa</td>
-      <td th:text="${row.value}">aaaaaaaaaa</td>
-    </tr>
-  </table>
+
+
 </body>
 </html>
