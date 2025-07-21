@@ -14,12 +14,16 @@
   border-collapse: collapse;
 }
 
-.table-bordered td,
-.table-bordered th {
+.table-full {
+  border-collapse: collapse;  /* これが超重要！ */
+  width: 100%;
+}
+
+.table-full th,
+.table-full td {
   border: 1px solid #333;
   padding: 8px;
 }
-
 .table-header {
   background-color: #f0f0f0;
   font-weight: bold;
@@ -32,6 +36,7 @@
 .table-sm td, .table-sm th {
   padding: 4px 8px;
 }
+
 p, div {
   line-height: 1.4 !important;
 }
@@ -45,6 +50,31 @@ p, div {
     font-size: 10px;
   }
 }
+@media print {
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  table {
+    page-break-inside: auto;
+    width: 100%;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+
+
 .f {
   display: -webkit-flex;
   display: -moz-flex;
@@ -75,7 +105,7 @@ p, div {
       <div>南花畑発電所</div>
       <div>巡視日常点検 2025年7月</div>
     </div>
-    <table class="border table-bordered table-striped table-sm" style="float: right;">
+    <!-- <table class="border table-bordered table-striped table-sm" style="float: right;">
       <thead class="table-header">
         <tr>
           <th class="col-name">名前</th>
@@ -95,7 +125,7 @@ p, div {
           <td class="col-action">報告</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
     <div style="clear: both;"></div>
 
   </div>
@@ -107,17 +137,19 @@ p, div {
 
 
 <a href="#" onclick="window.print()">印刷またはPDF保存</a>
-<div class="page-break"></div> <!-- ★ 改ページ -->
+<!-- <div class="page-break"></div> ★ 改ページ -->
 
     <a href="/report/pdf" target="_blank">PDFをダウンロード</a>
 
 
 
-  <table border="1">
-    <tr>
-      <th>aaaaaaaaa</th>
-      <th>aaaaaaa</th>
-    </tr>
+  <table border="1" class="table-full">
+    <thead>
+      <tr>
+        <th>aaaaaaaaa</th>
+        <th>aaaaaaa</th>
+      </tr>
+    </thead>
     <tr th:each="row : ${rows}">
       <td th:text="${row.name}">aaaaaaaaa</td>
       <td th:text="${row.value}">aaaaaaaaaa</td>
