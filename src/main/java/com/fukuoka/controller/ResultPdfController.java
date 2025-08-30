@@ -118,6 +118,8 @@
 package com.fukuoka.controller;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,22 +150,20 @@ public class ResultPdfController {
         
         // 1) データ取得
         List<Map<String, String>> rows = fetchRows(cond);
-
+        List<String> headerss = java.util.stream.IntStream.rangeClosed(1, 20)
+        .mapToObj(i -> "Col" + i)
+        .collect(java.util.stream.Collectors.toList()); 
         // 2) HTML生成
         Context ctx = new Context();
         ctx.setVariable("rows", rows);
+        ctx.setVariable("headers", headerss);  // ★追加
+
         String html = templateEngine.process("hoge", ctx); // テンプレート名を明確に
-
-
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        System.out.println(html);
-
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         // 3) PDF生成
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();
-        //renderer.getSharedContext().setPrint(true);
+        renderer.getSharedContext().setPrint(true);
         //renderer.getSharedContext().setInteractive(false);
 
         // フォント設定（日本語対応）
@@ -194,56 +194,16 @@ public class ResultPdfController {
     }
 
     private List<Map<String, String>> fetchRows(ReportCondition cond) {
-        // 実際の業務ではDBから取得
-        return List.of(
-            Map.of("name", "項目1", "value", "値1"),
-            Map.of("name", "項目2", "value", "値2"),
-            Map.of("name", "項目3", "value", "値3"),
-            Map.of("name", "項目4", "value", "値4"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-                        Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-            Map.of("name", "項目5", "value", "値5"),
-
-            Map.of("name", "項目5", "value", "値5"),
-
-            // ... 大量のデータ
-            Map.of("name", "項目46", "value", "値46")
-        );
+    int n = 8000; // 必要に応じて cond から取得
+    List<Map<String, String>> rows = new ArrayList<>(n);
+    for (int i = 1; i <= n; i++) {
+        Map<String, String> m = new HashMap<>();
+        m.put("name", "項目" + i);
+        m.put("value", "値" + i);
+        rows.add(m);
     }
+    return rows;
+}
 
     public static class ReportCondition {
         // 検索条件のプロパティ

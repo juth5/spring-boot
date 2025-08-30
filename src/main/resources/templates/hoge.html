@@ -11,7 +11,11 @@ body {
   font-family: 'Noto Sans JP';
 }
 @page {
-  size: A4;
+  
+  size: A3 landscape;   /* A3の横向き */
+  font-size: 10.5pt;     /* 目安: 9–11pt */
+  line-height: 1.4;      /* 行間は明示すると崩れにくい */
+  margin: 10mm;         /* 余白はお好みで */
   margin-right: 1mm;
   margin-left: 1mm;
   margin-top: 10mm;
@@ -95,14 +99,13 @@ th,td{ border:1px solid #333; padding:8px; }
       </tbody>
     </table>
     <div style="clear: both;"></div>
-
   </div>
 
 <table>
   <thead>
     <tr>
-      <th>ヘッダー1</th>
-      <th>ヘッダー2</th>
+    <th th:each="h : ${headers}" th:text="${h}">Header</th>
+
     </tr>
   </thead>
   <tbody>

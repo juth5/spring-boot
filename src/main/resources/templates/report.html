@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+  <!-- <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script> -->
 
   <title>PDF Report</title>
   <style>
@@ -56,30 +56,14 @@ p, div {
   }
 }
 
-@media print {
-  thead {
-    display: table-header-group;
-  }
+thead { display: table-header-group; page-break-after: avoid; }
+tbody { display: table-row-group; }
+tfoot { display: table-footer-group; }
 
-  tfoot {
-    display: table-footer-group;
-  }
+table.report { border-collapse: collapse; width:100%; }
+tr { page-break-inside: avoid; break-inside: avoid; }
 
-  .page-break {
-    page-break-before: always;
-  }
 
-  table {
-    page-break-inside: auto;
-        width: 50% !important;
-
-  }
-
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
-  }
-}
 
 
 </style>
@@ -172,10 +156,12 @@ p, div {
         <th>kkkkkkkkkkkkkkkkkkkkkkkkk</th>
       </tr>
     </thead>
-    <tr th:each="row : ${rows}">
-      <td th:text="${row.name}"></td>
-      <td th:text="${row.value}"></td>
-    </tr>
+    <tbody>
+      <tr th:each="row : ${rows}">
+        <td th:text="${row.name}"></td>
+        <td th:text="${row.value}"></td>
+      </tr>
+    </tbody>
   </table>
 
 
