@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script> -->
+
+  <title>PDF Report</title>
+  <style>
+  body {
+  font-family: 'Noto Sans JP';
+}
+
+.page-break {
+  page-break-before: always;
+}
+
+.border {
+  border-collapse: collapse;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--border-color);
+}
+
+.table-full {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-full th,
+.table-full td {
+  border: 1px solid #333;
+  padding: 8px;
+}
+
+p, div {
+  line-height: 1.4 !important;
+}
+
+.p6 {
+  padding: 6px !important;
+}
+
+.mb4 {
+  margin-bottom: 4px;
+}
+
+@page {
+  size: A4;
+  margin: 10mm;
+  @top-center {
+    content: "会社名";
+  }
+  @bottom-center {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 10px;
+  }
+}
+
+thead { display: table-header-group; page-break-after: avoid; }
+tbody { display: table-row-group; }
+tfoot { display: table-footer-group; }
+
+table.report { border-collapse: collapse; width:100%; }
+tr { page-break-inside: avoid; break-inside: avoid; }
+
+
+
+
+</style>
+</head>
+<body>
+  <div style="width: 100%;" class="mb4">
+    <div style="float: left;">
+      <div>南花畑発電所</div>
+      <div>巡視日常点検 2025年7月</div>
+    </div>
+    <table class="border table-bordered table-striped table-sm" style="float: right;">
+      <thead class="table-header">
+        <tr>
+          <th class="col-name">名前</th>
+          <th class="col-date">日付</th>
+          <th class="col-action">操作</th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <tr class="table-row">
+          <td class="col-name">深川</td>
+          <td class="col-date">2025年7月10日</td>
+          <td class="col-action">承認</td>
+        </tr>
+        <tr class="table-row">
+          <td class="col-name">田中</td>
+          <td class="col-date">2025年7月7日</td>
+          <td class="col-action">報告</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="clear: both;"></div>
+
+  </div>
+
+  <div>
+    <div class="mb4">コメント</div>
+    <div class="border p6">10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけて10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけています。午後5時時点では、線状降水帯の発生は確認されていませんが、今後の状況には十分な注意が必要です。千葉市でも、急な雷雨により多くの人がずぶぬれとなり、駅前では屋根のある場所へ急ぐ姿が見られました。10日午後から、関東地方では各地でゲリラ雷雨が相次いで発生しました。栃木県大田原市では、空を走る稲光に続いて複数回の雷が観測され、激しい雷雨に見舞われました。また、鹿沼市にいた取材班も雷を確認し、次第に空が真っ暗になるとともに、強い雨が降り始めました。突然の天候の変化により、周囲の景色は一変しました。気象庁は、東京都、千葉県、埼玉県、群馬県、栃木県、茨城県の1都5県において、雨雲が連続して流れ込み、大雨をもたらす「線状降水帯」が発生する恐れがあると発表しています。10日夕方から夜にかけて、災害級の大雨となる可能性もあり、警戒を呼びかけています。あああああああまた、記録的短時間大雨情報が発表された埼玉県上尾市では、駅前で急いで帰宅の途につく人々の姿が見受けられました。</div>
+  </div>
+
+<button onclick="pdfDownloaded()">ダウンロード</button>
+<a href="#" onclick="window.print()">印刷またはPDF保存</a>
+<div class="page-break"></div>
+
+    <a href="/report/pdf" target="_blank">PDFをダウンロード</a>
+  <div class="mb4">
+    <table border="1" class="table-full">
+      <thead>
+        <tr>
+          <th>tttttttttttttttttt</th>
+          <th>tttttttttttttttttttt</th>
+        </tr>
+      </thead>
+      <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+            <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+            <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+            <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+      <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+            <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+            <tr>
+        <td>tttttttttttttttttt</td>
+        <td>ttttttttttttttttt</td>
+      </tr>
+
+    </table>
+  </div>
+
+  <table border="1" class="table-full">
+    <thead>
+      <tr>
+        <th>kkkkkkkkkkkkkkkkkkkkkkk</th>
+        <th>kkkkkkkkkkkkkkkkkkkkkkkkk</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="row : ${rows}">
+        <td th:text="${row.name}"></td>
+        <td th:text="${row.value}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+<script>
+  console.log("Hello, Paged.js!");
+
+
+  
+  let pdfDownloaded = async () => {
+    try {
+      const res = await fetch("/api/report/pdf", { method: "POST" });
+      if (!res.ok) throw new Error("生成失敗");
+
+      const blob = await res.blob();
+      console.log(blob, "blob");
+      const url = URL.createObjectURL(blob);
+
+      // ダウンロードさせる
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "report.pdf";
+      a.click();
+      URL.revokeObjectURL(url);
+
+    } catch (e) {
+      alert("帳票の生成に失敗しました");
+    } finally {
+
+    }
+  };
+
+
+</script>
+
+</body>
+</html>
